@@ -107,19 +107,6 @@ while True:
             client.send_message(chat, info)
             latest_posts[url] = latest_post
             print("Sent new post for URL:", url)
+    sleep (2*60)
 
-    sleep (5*60)
-'''
-while True:
-	for url in urls:
-		feed = feedparser.parse(url)
-		latest_post = feed.entries[0]
-		sleep(0.1)
-		info = ''
-		title = "[{}]({})".format(latest_post.title,latest_post.link)
-		info += title+"\n\n{}".format(hash(url))
-		client.send_message(chat,info)
-		print (Fore.RED+"==>>Message Send Done"+cend)
-		sleep(0.5)
-'''
 client.run_until_disconnected()
