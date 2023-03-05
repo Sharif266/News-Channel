@@ -34,7 +34,6 @@ logging.basicConfig(format='[%(levelname) 5s/%(asctime)s] %(name)s: %(message)s'
 import urllib.request
 from requests import Request, Session
 from requests.exceptions import ConnectionError, Timeout, TooManyRedirects
-import stripe
 import traceback
 from traceback import format_exc
 from colorama import Fore, init as color_ama
