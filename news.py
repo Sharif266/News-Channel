@@ -114,7 +114,7 @@ while True:
             # Send a notification or perform any other action
             info = f"[{title}]({link})\n\n{hash(url)}"
             print(f"New post in {url}: {title} ({link})")
-            
+            chat = "https://t.me/NewsBo_X"
             # Send the message to the chat
             client.send_message(chat, info)
 
