@@ -55,12 +55,6 @@ else:
     client.disconnect()
     os.system('exit')
 
-import feedparser
-import time
-
-import feedparser
-import time
-
 # URLs of the RSS feeds
 rss_urls = [
     "https://www.coindesk.com/arc/outboundfeeds/rss/",
@@ -97,7 +91,7 @@ while True:
 
                 # Send a notification or perform any other action
                 print(f"New post in {url}: {title} ({link})")
-                
+                chat_id ="https://t.me/NewsBo_X"
                 # Send the message to the chat
                 info = f"[{title}]({link})\n\n#{url.split('.')[1]}"
                 client.send_message(chat_id, info)
