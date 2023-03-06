@@ -55,6 +55,25 @@ else:
     client.disconnect()
     os.system('exit')
 
+def hash(url):
+    hash_map = {
+        "https://www.coindesk.com/arc/outboundfeeds/rss/": "#coindesk",
+        "https://cointelegraph.com/rss": "#cointelegraph",
+        "https://bitcoinmagazine.com/.rss/full/": "#bitcoinmagazine",
+        "https://news.bitcoin.com/feed/": "#newsbitcoin",
+        "https://www.reutersagency.com/feed/?taxonomy=best-sectors&post_type=best": "#reutersagency",
+        "https://coinjournal.net/news/feed/": "#coinjournal",
+        "https://cryptobriefing.com/feed/": "#cryptobriefing",
+        "https://www.newsbtc.com/feed/": "#newsbtc",
+        "https://www.bloomberg.com/professional/feed/": "#bloomberg"
+    }
+
+    for key in hash_map:
+        if key in url:
+            return hash_map[key]
+
+    return ""
+
 # URLs of the RSS feeds
 rss_urls = [
     "https://www.coindesk.com/arc/outboundfeeds/rss/",
@@ -93,7 +112,7 @@ while True:
                 print(f"New post in {url}: {title} ({link})")
                 chat_id ="https://t.me/NewsBo_X"
                 # Send the message to the chat
-                info = f"[{title}]({link})\n\n#{url.split('.')[1]}"
+                info = f"[{title}]({link})\n\n#{hash(url)}"
                 client.send_message(chat_id, info)
         except Exception as e:
             print(f"Error retrieving RSS feed {url}: {str(e)}")
