@@ -58,25 +58,8 @@ else:
 import feedparser
 import time
 
-def hash(url):
-    if "coindesk" in url:
-        return "#coindesk"
-    elif "cointelegraph" in url:
-        return "#cointelegraph"
-    elif "bitcoinmagazine" in url:
-        return "#bitcoinmagazine"
-    elif "bitcoin" in url:
-        return "#newsbitcoin"
-    elif "reutersagency" in url:
-        return "#reutersagency"
-    elif "coinjournal" in url:
-        return "#coinjournal"
-    elif "cryptobriefing" in url:
-        return "#cryptobriefing"
-    elif "newsbtc" in url:
-        return "#newsbtc"
-    elif "bloomberg" in url:
-        return "#bloomberg"
+import feedparser
+import time
 
 # URLs of the RSS feeds
 rss_urls = [
@@ -96,29 +79,34 @@ latest_posts = {url: None for url in rss_urls}
 
 while True:
     for url in rss_urls:
-        # Parse the RSS feed
-        feed = feedparser.parse(url)
+        try:
+            # Parse the RSS feed
+            feed = feedparser.parse(url)
 
-        # Get the latest post from the RSS feed
-        latest_post = feed.entries[0]
+            # Get the latest post from the RSS feed
+            latest_post = feed.entries[0]
 
-        # Check if the latest post is different from the previous one
-        if latest_post != latest_posts[url]:
-            # Save the latest post as the new previous post
-            latest_posts[url] = latest_post
+            # Check if the latest post is different from the previous one
+            if latest_post.link != latest_posts[url]:
+                # Save the URL of the latest post as the new previous post
+                latest_posts[url] = latest_post.link
 
-            # Extract the title and link of the latest post
-            title = latest_post.title
-            link = latest_post.link
+                # Extract the title and link of the latest post
+                title = latest_post.title
+                link = latest_post.link
 
-            # Send a notification or perform any other action
-            info = f"[{title}]({link})\n\n{hash(url)}"
-            print(f"New post in {url}: {title} ({link})")
-            chat = "https://t.me/NewsBo_X"
-            # Send the message to the chat
-            client.send_message(chat, info)
+                # Send a notification or perform any other action
+                print(f"New post in {url}: {title} ({link})")
+                
+                # Send the message to the chat
+                info = f"[{title}]({link})\n\n#{url.split('.')[1]}"
+                client.send_message(chat_id, info)
+        except Exception as e:
+            print(f"Error retrieving RSS feed {url}: {str(e)}")
+            continue
 
     # Wait for some time before checking for new posts again
     time.sleep(60)
+
 
 client.run_until_disconnected()
