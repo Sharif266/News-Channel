@@ -55,58 +55,70 @@ else:
     client.disconnect()
     os.system('exit')
 
+import feedparser
+import time
+
 def hash(url):
-	if "coindesk" in url:
-		return "#coindesk"
-	elif "cointelegraph" in url:
-		return "#cointelegraph"
-	elif "bitcoinmagazine" in url:
-		return "#bitcoinmagazine"
-	elif "bitcoin" in url:
-		return "#newsbitcoin"
-	elif "reutersagency" in url:
-		return "#reutersagency"
-	elif "coinjournal" in url:
-		return "#coinjournal"
-	elif "cryptobriefing" in url:
-		return "#cryptobriefing"
-	elif "newsbtc" in url:
-		return "#newsbtc"
-	elif "bloomberg" in url:
-		return "#bloomberg"
+    if "coindesk" in url:
+        return "#coindesk"
+    elif "cointelegraph" in url:
+        return "#cointelegraph"
+    elif "bitcoinmagazine" in url:
+        return "#bitcoinmagazine"
+    elif "bitcoin" in url:
+        return "#newsbitcoin"
+    elif "reutersagency" in url:
+        return "#reutersagency"
+    elif "coinjournal" in url:
+        return "#coinjournal"
+    elif "cryptobriefing" in url:
+        return "#cryptobriefing"
+    elif "newsbtc" in url:
+        return "#newsbtc"
+    elif "bloomberg" in url:
+        return "#bloomberg"
 
-urls = ("https://www.coindesk.com/arc/outboundfeeds/rss/",
-	"https://cointelegraph.com/rss",
-	"https://bitcoinmagazine.com/.rss/full/",
-	"https://news.bitcoin.com/feed/",
-	"https://www.reutersagency.com/feed/?taxonomy=best-sectors&post_type=best",
-	"https://coinjournal.net/news/feed/",
-	"https://cryptobriefing.com/feed/",
-	"https://www.newsbtc.com/feed/",
-	"https://www.bloomberg.com/professional/feed/"
-	)
+# URLs of the RSS feeds
+rss_urls = [
+    "https://www.coindesk.com/arc/outboundfeeds/rss/",
+    "https://cointelegraph.com/rss",
+    "https://bitcoinmagazine.com/.rss/full/",
+    "https://news.bitcoin.com/feed/",
+    "https://www.reutersagency.com/feed/?taxonomy=best-sectors&post_type=best",
+    "https://coinjournal.net/news/feed/",
+    "https://cryptobriefing.com/feed/",
+    "https://www.newsbtc.com/feed/",
+    "https://www.bloomberg.com/professional/feed/"
+]
 
-chat = "https://t.me/NewsBo_X"
-
-
-latest_posts = {}
+# Dictionary to keep track of latest posts for each RSS feed
+latest_posts = {url: None for url in rss_urls}
 
 while True:
-    for url in urls:
+    for url in rss_urls:
+        # Parse the RSS feed
         feed = feedparser.parse(url)
+
+        # Get the latest post from the RSS feed
         latest_post = feed.entries[0]
-        sleep(0.1)
-        info = ''
-        title = "[{}]({})".format(latest_post.title,latest_post.link)
-        info += title+"\n\n{}".format(hash(url))
-        # Check if the latest post for this URL is different from the last sent post
-        if url in latest_posts and latest_posts[url] == latest_post:
-            print("Skipping duplicate post for URL:", url)
-        else:
-            # Send the message to the chat and update the latest post for this URL
-            client.send_message(chat, info)
+
+        # Check if the latest post is different from the previous one
+        if latest_post != latest_posts[url]:
+            # Save the latest post as the new previous post
             latest_posts[url] = latest_post
-            print("Sent new post for URL:", url)
-    sleep (2*60)
+
+            # Extract the title and link of the latest post
+            title = latest_post.title
+            link = latest_post.link
+
+            # Send a notification or perform any other action
+            info = f"[{title}]({link})\n\n{hash(url)}"
+            print(f"New post in {url}: {title} ({link})")
+            
+            # Send the message to the chat
+            client.send_message(chat, info)
+
+    # Wait for some time before checking for new posts again
+    time.sleep(60)
 
 client.run_until_disconnected()
