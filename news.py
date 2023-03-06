@@ -112,7 +112,7 @@ while True:
                 print(f"New post in {url}: {title} ({link})")
                 chat_id ="https://t.me/NewsBo_X"
                 # Send the message to the chat
-                info = f"[{title}]({link})\n\n#{hash(url)}"
+                info = f"[{title}]({link})\n\n{hash(url)}"
                 client.send_message(chat_id, info)
         except Exception as e:
             print(f"Error retrieving RSS feed {url}: {str(e)}")
