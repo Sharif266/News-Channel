@@ -65,7 +65,8 @@ def hash(url):
         "https://coinjournal.net/news/feed/": "#coinjournal",
         "https://cryptobriefing.com/feed/": "#cryptobriefing",
         "https://www.newsbtc.com/feed/": "#newsbtc",
-        "https://www.bloomberg.com/professional/feed/": "#bloomberg"
+        "https://www.bloomberg.com/professional/feed/": "#bloomberg",
+        "https://decrypt.co/feed":"#dycrypt"
     }
 
     for key in hash_map:
@@ -84,7 +85,8 @@ rss_urls = [
     "https://coinjournal.net/news/feed/",
     "https://cryptobriefing.com/feed/",
     "https://www.newsbtc.com/feed/",
-    "https://www.bloomberg.com/professional/feed/"
+    "https://www.bloomberg.com/professional/feed/",
+    "https://decrypt.co/feed"
 ]
 
 # Dictionary to keep track of latest posts for each RSS feed
