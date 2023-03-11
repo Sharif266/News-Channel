@@ -116,10 +116,12 @@ while True:
                 # Send the message to the chat
                 info = f"[{title}]({link})\n\n{hash(url)} | @NewsBo_X"
                 client.send_message(chat_id, info)
+            else:
+                # Update the latest_posts dictionary even if the post is the same
+                latest_posts[url] = latest_post.link
         except Exception as e:
             print(f"Error retrieving RSS feed {url}: {str(e)}")
             continue
-
     # Wait for some time before checking for new posts again
     time.sleep(60)
 
